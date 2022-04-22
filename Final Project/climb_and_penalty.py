@@ -8,6 +8,9 @@ NUM_OF_EPISODE = 200
 NUM_OF_SIMULATION = 10
 environment_grid = [[11,-30,0],[-30,0,5],[0,0,5]]
 
+k = 0 #placeholder value to be changed
+enviroment_grid_penaly = [[10,0,k],[0,2,0],[k,0,10]]
+
 
 def climb_and_penalty(grid, alpha, gamma, ex):
 
