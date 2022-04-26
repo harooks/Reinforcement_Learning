@@ -9,7 +9,7 @@ NUM_OF_EPISODE = 200
 NUM_OF_SIMULATION = 10
 
 
-def boutilier(grid, alpha, gamma, ex, k):
+def boutilier(alpha, gamma, ex, k):
 
   action_arr = ['a', 'b']
 
@@ -24,12 +24,6 @@ def boutilier(grid, alpha, gamma, ex, k):
   # initialize current state to 0 (S1)
   cur_state = 0
 
-  # not sure but this gets the array of the two actions of current state
-  q_a1 = Q[cur_state]
-  q_b1 = Q[cur_state]
-  q_a2 = Q[cur_state]
-  q_b2 = Q[cur_state]
-
   reward = 0
 
   agent1 = Agent(Q1a[cur_state], Q1b[cur_state], action_arr, ex, reward, alpha, gamma)
@@ -38,12 +32,14 @@ def boutilier(grid, alpha, gamma, ex, k):
   cur_state = 0 #S1
   # [S1, S2, S3, S4, S5, S6]
 
-  while not(cur_state == 4) and not(cur_state == 5) and not(cur_state == 6):
+  while not(cur_state == 3) and not(cur_state == 4) and not(cur_state == 5):
 
     # take action
     action1 = agent1.choose_action()
     action2 = agent2.choose_action()
 
+    print("agent 1 chose: ", action1[1])
+    print("agent 2 chose: ", action2[1])
     # create next_state
     next_state = cur_state
 
@@ -86,7 +82,8 @@ def boutilier(grid, alpha, gamma, ex, k):
     agent2.update_Qtable(action1[0], action2[1], action2[2], reward, alpha,
                          gamma, Q2a[cur_state], Q2b[cur_state], Q2a[next_state], Q2b[next_state])
 
-
-
     # S <- S'
     cur_state = next_state
+    print(cur_state)
+
+boutilier(0.1, 0, 0.5, 10)
