@@ -40,9 +40,9 @@ class Agent:
 
     # Get reward from enviroment
 
-  def update_Qtable(self, a_or_b, action, val, reward, alpha, gamma, q_a, q_b):
+  def update_Qtable(self, a_or_b, action, val, reward, alpha, gamma, q_a, q_b, next_q_a, next_q_b):
 
     if a_or_b == 0: #A
-      q_a[action] = val + (alpha * (reward + (gamma * max(q_b) - val)))
+      q_a[action] = val + (alpha * (reward + (gamma * max(next_q_b) - val)))
     else:
-      q_b[action] = val + (alpha * (reward + (gamma * max(q_a) - val)))
+      q_b[action] = val + (alpha * (reward + (gamma * max(next_q_a) - val)))

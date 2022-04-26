@@ -14,7 +14,6 @@ enviroment_grid_penaly = [[10,0,k],[0,2,0],[k,0,10]]
 
 def climb_and_penalty(grid, alpha, gamma, ex):
 
-
     action_arr = ['a','b','c']
     reinforcement_val = 0
     reinforcement_val_arr = [0 for _ in range(NUM_OF_EPISODE)]
@@ -27,7 +26,7 @@ def climb_and_penalty(grid, alpha, gamma, ex):
 
     # make agents and 2 q tables for each agent
     agent1 = Agent(q_a1, q_b1, action_arr, ex, reward, alpha, gamma)
-    agent2 = Agent(q_a1, q_b1, action_arr, ex, reward, alpha, gamma)
+    agent2 = Agent(q_a2, q_b2, action_arr, ex, reward, alpha, gamma)
 
 
     for episode in range(NUM_OF_EPISODE):
@@ -66,8 +65,18 @@ def climb_and_penalty(grid, alpha, gamma, ex):
         # reinforcement_val_arr[episode] += reinforcement_val
 
         # Update Q value
-        agent1.update_Qtable(action1[0], action1[1], action1[2], reward, alpha, gamma, q_a1, q_b1)
-        agent2.update_Qtable(action2[0], action2[1], action2[2], reward, alpha, gamma, q_a2, q_b2)
+        ## QUESTION: since there is only one policy, is next state current state?
+        # Q[cur_row][cur_col][action] = val + (alpha * (reward + (gamma * max(Q[next_row][next_col])) - val))
+        next_q_a1 = q_a1
+        next_q_b1 = q_b1
+
+        next_q_a2 = q_a2
+        next_q_b2 = q_b2
+
+        agent1.update_Qtable(
+            action1[0], action1[1], action1[2], reward, alpha, gamma, q_a1, q_b1, next_q_a1, next_q_b1)
+        agent2.update_Qtable(
+            action2[0], action2[1], action2[2], reward, alpha, gamma, q_a2, q_b2, next_q_a2, next_q_b2)
 
 
 # def climb_and_penalty(grid, alpha, gamma, ex):
