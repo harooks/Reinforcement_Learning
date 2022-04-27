@@ -4,19 +4,24 @@ import random
 from agent import Agent
 
 
-NUM_OF_EPISODE = 200
+NUM_OF_EPISODE = 1000
 NUM_OF_SIMULATION = 10
-environment_grid = [[11,-30,0],[-30,0,5],[0,0,5]]
+environment_grid_climb = [[11,-30,0],[-30,0,5],[0,0,5]]
 
 k = 0 #placeholder value to be changed
-enviroment_grid_penaly = [[10,0,k],[0,2,0],[k,0,10]]
+environment_grid_penalty = [[10, 0, k], [0, 2, 0], [k, 0, 10]]
 
 
 def climb_and_penalty(grid, alpha, gamma, ex):
 
+    max_reward = 0
+    for row in range(3):
+        for col in range(3):
+            if grid[row][col] > max_reward:
+                max_reward = grid[row][col]
+
+
     action_arr = ['a','b','c']
-    reinforcement_val = 0
-    reinforcement_val_arr = [0 for _ in range(NUM_OF_EPISODE)]
     reward = 0
 
     q_a1 = [0, 0, 0]
@@ -28,8 +33,9 @@ def climb_and_penalty(grid, alpha, gamma, ex):
     agent1 = Agent(q_a1, q_b1, action_arr, ex, reward, alpha, gamma)
     agent2 = Agent(q_a2, q_b2, action_arr, ex, reward, alpha, gamma)
 
-
+    count = 0
     for episode in range(NUM_OF_EPISODE):
+        reward = 0
 
         # choose action
         action1 = agent1.choose_action() # does this take in q_a and q_b??
@@ -78,9 +84,18 @@ def climb_and_penalty(grid, alpha, gamma, ex):
         agent2.update_Qtable(
             action2[0], action2[1], action2[2], reward, alpha, gamma, q_a2, q_b2, next_q_a2, next_q_b2)
 
+        # Count max reward numbers
+        #print("max reward is:", max_reward, "reward is: ", reward)
+        if reward == max_reward:
+            count += 1
+
+    # return proportion
+    print((count / NUM_OF_EPISODE) * 100)
+    return (count / NUM_OF_EPISODE) * 100
+
 
 # def climb_and_penalty(grid, alpha, gamma, ex):
-climb_and_penalty(environment_grid, 0.1, 0, 0.5)
+climb_and_penalty(environment_grid_penalty, 0.1, 0, 0.5)
 
 
 

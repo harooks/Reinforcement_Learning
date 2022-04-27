@@ -1,5 +1,3 @@
-from calendar import c
-from curses import curs_set
 import enum
 import random
 
@@ -15,7 +13,6 @@ def boutilier(alpha, gamma, ex, k):
 
   # each state and action is a key and the q-Val is the value
 
-  # Q = {'S1a': 0, 'S1b': 0, 'S2a': 0, 'S2b': 0, 'S3a': 0, 'S3b': 0, 'S4a': 0, 'S4b': 0, 'S5a': 0, 'S5b': 0, 'S6a': 0, 'S6b': 0}
   Q1a = [[0, 0] for _ in range(6)]
   Q1b = [[0, 0] for _ in range(6)]
   Q2a = [[0, 0] for _ in range(6)]
@@ -77,7 +74,8 @@ def boutilier(alpha, gamma, ex, k):
 
     # Q value Calculation
     # (self, a_or_b, action, val, reward, alpha, gamma, q_a, q_b, prev_q_a, prev_q_b):
-    agent1.update_Qtable(action1[0], action1[1], action1[2], reward, alpha, gamma, Q1a[cur_state], Q1b[cur_state], Q1a[next_state], Q1b[next_state])
+    agent1.update_Qtable(action1[0], action1[1], action1[2], reward, alpha,
+                         gamma, Q1a[cur_state], Q1b[cur_state], Q1a[next_state], Q1b[next_state])
 
     agent2.update_Qtable(action1[0], action2[1], action2[2], reward, alpha,
                          gamma, Q2a[cur_state], Q2b[cur_state], Q2a[next_state], Q2b[next_state])
