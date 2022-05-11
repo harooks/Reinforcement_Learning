@@ -3,16 +3,17 @@ import random
 
 class Agent:
 
-  def __init__(self, q_a, q_b, action_arr, ex, reward, alpha, gamma):
+  def __init__(self, q_a, q_b, action_arr, reward, alpha, gamma):
     self.q_a = q_a
     self.q_b = q_b
     self.action_arr = action_arr
-    self.ex = ex
 
-  def choose_action(self):
 
+  def choose_action(self, ex):
     # Greedy
-    if random.random() > self.ex:
+    # print("ex value in choose_action is:", ex)
+    if random.random() > ex:
+        # print("explore")
         a_or_b = random.randint(0,1)
 
         if a_or_b == 0:
@@ -24,6 +25,7 @@ class Agent:
 
     # Random
     else:
+        # print("random")
         # index of action choice chosen randomly
         action = random.randrange(0, len(self.action_arr))
         a_or_b = random.randint(0, 1)
@@ -38,7 +40,6 @@ class Agent:
 
     return [a_or_b, action, val]
 
-    # Get reward from enviroment
 
   def update_Qtable(self, a_or_b, action, val, reward, alpha, gamma, q_a, q_b, next_q_a, next_q_b):
 

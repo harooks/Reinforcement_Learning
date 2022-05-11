@@ -1,6 +1,7 @@
 import enum
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 
 from agent import Agent
 
@@ -12,7 +13,7 @@ def boutilier(alpha, gamma, ex, k):
   percentage_arr = []
   action_arr = ['a', 'b']
   max_reward = max(7, k, 11)
-
+  reinforcement_val_arr = [0 for _ in range(NUM_OF_EPISODE)]
 
   for simulation in range(NUM_OF_SIMULATION):
     # each state and action is a key and the q-Val is the value
@@ -23,22 +24,26 @@ def boutilier(alpha, gamma, ex, k):
 
     reward = 0
     cur_state = 0
-    agent1 = Agent(Q1a[cur_state], Q1b[cur_state], action_arr, ex, reward, alpha, gamma)
-    agent2 = Agent(Q2a[cur_state], Q2b[cur_state], action_arr, ex, reward, alpha, gamma)
+    agent1 = Agent(Q1a[cur_state], Q1b[cur_state], action_arr, reward, alpha, gamma)
+    agent2 = Agent(Q2a[cur_state], Q2b[cur_state], action_arr, reward, alpha, gamma)
 
     count = 0
     T = 1
     for episode in range(NUM_OF_EPISODE):
-      ex = 1 / T
+      if episode == 0:
+        ex = 1
+      else:
+        ex = 1 / T
       reward = 0
+      reinforcement_val = 0
       # initialize current state to 0 (S1)
       cur_state = 0 #S1
       # [S1, S2, S3, S4, S5, S6]
       while not(cur_state == 3) and not(cur_state == 4) and not(cur_state == 5):
 
         # take action
-        action1 = agent1.choose_action()
-        action2 = agent2.choose_action()
+        action1 = agent1.choose_action(ex)
+        action2 = agent2.choose_action(ex)
 
         # print("agent 1 chose: ", action1[1])
         # print("agent 2 chose: ", action2[1])
@@ -88,16 +93,28 @@ def boutilier(alpha, gamma, ex, k):
         # S <- S'
         cur_state = next_state
 
+      # Put reward in array
+      reinforcement_val += reward
+      reinforcement_val_arr[episode] += reinforcement_val
+
       if reward == max_reward:
         count += 1
       T += 1
 
-    percentage = (count / NUM_OF_EPISODE) * 100
-    percentage_arr.append(percentage)
+  for episode in range(NUM_OF_EPISODE):
+      reinforcement_val_arr[episode] /= NUM_OF_SIMULATION
+
+  x = np.arange(NUM_OF_EPISODE)
+  y = np.array(reinforcement_val_arr)
+  plt.plot(x, y, color="green")
+  plt.show()
+  percentage = (count / NUM_OF_EPISODE) * 100
+  percentage_arr.append(percentage)
 
   mean_per = np.mean(percentage_arr)
   print(mean_per)
 
 
 # boutilier(alpha, gamma, ex, k)
-boutilier(0.1, 0, 1, 1)
+# boutilier(0.1, 0, 0.1, 0)
+boutilier(0.1, 0.9, 1, 0)

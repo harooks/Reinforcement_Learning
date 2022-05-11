@@ -1,14 +1,13 @@
 import enum
 import random
 import numpy as np
-import matplotlib.pyplot as plt
-
 
 from agent import Agent
 
-
 NUM_OF_EPISODE = 1000
 NUM_OF_SIMULATION = 500
+
+new_environment = [[11, -30, 0, 5], [-30, 7, 6, 0], [0, 0, 5, -30]]
 
 def climb_and_penalty(grid, alpha, gamma, ex):
     reward_arr = []
@@ -20,65 +19,74 @@ def climb_and_penalty(grid, alpha, gamma, ex):
             if grid[row][col] > max_reward:
                 max_reward = grid[row][col]
 
-    action_arr = ['a','b','c']
-    reinforcement_val_arr = [0 for _ in range(NUM_OF_EPISODE)]
+    action_arr_1 = ['a', 'b', 'c']
+    action_arr_2 = ['a', 'b', 'c', 'd']
 
     for simulation in range(NUM_OF_SIMULATION):
-
-        reward = 0
-        reinforcement_val = 0
         q_a1 = [0, 0, 0]
         q_b1 = [0, 0, 0]
-        q_a2 = [0, 0, 0]
-        q_b2 = [0, 0, 0]
+        q_a2 = [0, 0, 0, 0]
+        q_b2 = [0, 0, 0, 0]
 
+        reward = 0
         # make agents and 2 q tables for each agent
-        agent1 = Agent(q_a1, q_b1, action_arr, reward, alpha, gamma)
-        agent2 = Agent(q_a2, q_b2, action_arr, reward, alpha, gamma)
+        agent1 = Agent(q_a1, q_b1, action_arr_1, ex, reward, alpha, gamma)
+        agent2 = Agent(q_a2, q_b2, action_arr_2, ex, reward, alpha, gamma)
 
         count = 0
         T = 1
-        # print("simulation", simulation, "ex:", ex)
         for episode in range(NUM_OF_EPISODE):
+            ex = 1 / T
 
             reward = 0
-            if episode == 0:
-                ex = 1
-            else:
-                ex = 1 / T
-            # choose action
-            action1 = agent1.choose_action(ex) # does this take in q_a and q_b??
-            action2 = agent2.choose_action(ex)
 
+            # choose action
+            action1 = agent1.choose_action()
+            action2 = agent2.choose_action()
 
             #index 1 is where action is
-            if(action1[1]==0 and action2[1]==0):
+            if(action1[1] == 0 and action2[1] == 0):
                 reward = grid[0][0]
 
-            if(action1[1]==0 and action2[1]==1):
+            if(action1[1] == 0 and action2[1] == 1):
                 reward = grid[0][1]
 
-            if(action1[1]==0 and action2[1]==2):
+            if(action1[1] == 0 and action2[1] == 2):
                 reward = grid[0][2]
 
-            if(action1[1]==1 and action2[1]==0):
+            if(action1[1] == 0 and action2[1] == 3):
+                reward = grid[0][3]
+
+            if(action1[1] == 1 and action2[1] == 0):
                 reward = grid[1][0]
 
-            if(action1[1]==1 and action2[1]==1):
+            if(action1[1] == 1 and action2[1] == 1):
                 reward = grid[1][1]
 
-            if(action1[1]==1 and action2[1]==2):
+            if(action1[1] == 1 and action2[1] == 2):
                 reward = grid[1][2]
 
-            if(action1[1]==2 and action2[1]==0):
+            if(action1[1] == 1 and action2[1] == 3):
+                reward = grid[1][3]
+
+            if(action1[1] == 2 and action2[1] == 0):
                 reward = grid[2][0]
 
-            if(action1[1]==2 and action2[1]==1):
+            if(action1[1] == 2 and action2[1] == 1):
                 reward = grid[2][1]
 
-            if(action1[1]==2 and action2[1]==2):
+            if(action1[1] == 2 and action2[1] == 2):
                 reward = grid[2][2]
 
+            if(action1[1] == 2 and action2[1] == 3):
+                reward = grid[2][3]
+
+            # reinforcement_val += reward
+            # reinforcement_val_arr[episode] += reinforcement_val
+
+            # Update Q value
+            ## QUESTION: since there is only one policy, is next state current state?
+            # Q[cur_row][cur_col][action] = val + (alpha * (reward + (gamma * max(Q[next_row][next_col])) - val))
             next_q_a1 = q_a1
             next_q_b1 = q_b1
 
@@ -93,7 +101,6 @@ def climb_and_penalty(grid, alpha, gamma, ex):
 
             ## add reward in array
             reward_arr.append(reward)
-            reinforcement_val_arr[episode] += reward
 
             # Count max reward numbers
             #print("max reward is:", max_reward, "reward is: ", reward)
@@ -104,24 +111,20 @@ def climb_and_penalty(grid, alpha, gamma, ex):
         percentage_arr.append(percentage)
 
     mean_per = np.mean(percentage_arr)
+    # print(percentage_arr)
+    # return proportion
+    # print("q_a1:", q_a1, "q_b1:", q_a2, "max:", max_reward)
 
-    for episode in range(NUM_OF_EPISODE):
-        reinforcement_val_arr[episode] /= NUM_OF_SIMULATION
-
-    x = np.arange(NUM_OF_EPISODE)
-    y = np.array(reinforcement_val_arr)
-    plt.plot(x, y, color="green")
-    plt.show()
+    # x = np.arange(NUM_OF_EPISODE)
+    # y = np.array(reward_arr)
+    # plt.plot(x, y, color="green")
+    # plt.show()
 
     print(mean_per)
     return mean_per
 
-environment_grid_climb = [[11, -30, 0], [-30, 7, 6], [0, 0, 5]]
 
-k = 0  # placeholder value to be changed
-environment_grid_penalty = [[10, 0, k], [0, 2, 0], [k, 0, 10]]
+
+
 # def climb_and_penalty(grid, alpha, gamma, ex):
-climb_and_penalty(environment_grid_penalty, 0.1, 0, 1)
-# Climb: 17.5002
-# Penalty k=0: 86.126
-# Penalty k=100: 61.0236
+climb_and_penalty(new_environment, 0.1, 0, 1)
