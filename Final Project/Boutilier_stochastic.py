@@ -24,8 +24,10 @@ def boutilier(alpha, gamma, ex, k):
 
     reward = 0
     cur_state = 0
-    agent1 = Agent(Q1a[cur_state], Q1b[cur_state], action_arr, reward, alpha, gamma)
-    agent2 = Agent(Q2a[cur_state], Q2b[cur_state], action_arr, reward, alpha, gamma)
+    agent1 = Agent(Q1a[cur_state], Q1b[cur_state],
+                   action_arr, reward, alpha, gamma)
+    agent2 = Agent(Q2a[cur_state], Q2b[cur_state],
+                   action_arr, reward, alpha, gamma)
 
     count = 0
     T = 1
@@ -37,7 +39,7 @@ def boutilier(alpha, gamma, ex, k):
       reward = 0
       reinforcement_val = 0
       # initialize current state to 0 (S1)
-      cur_state = 0 #S1
+      cur_state = 0  # S1
       # [S1, S2, S3, S4, S5, S6]
       while not(cur_state == 3) and not(cur_state == 4) and not(cur_state == 5):
 
@@ -85,10 +87,10 @@ def boutilier(alpha, gamma, ex, k):
         # Q value Calculation
         # (self, a_or_b, action, val, reward, alpha, gamma, q_a, q_b, prev_q_a, prev_q_b):
         agent1.update_Qtable(action1[0], action1[1], action1[2], reward, alpha,
-                            gamma, Q1a[cur_state], Q1b[cur_state], Q1a[next_state], Q1b[next_state])
+                             gamma, Q1a[cur_state], Q1b[cur_state], Q1a[next_state], Q1b[next_state])
 
         agent2.update_Qtable(action1[0], action2[1], action2[2], reward, alpha,
-                            gamma, Q2a[cur_state], Q2b[cur_state], Q2a[next_state], Q2b[next_state])
+                             gamma, Q2a[cur_state], Q2b[cur_state], Q2a[next_state], Q2b[next_state])
 
         # S <- S'
         cur_state = next_state

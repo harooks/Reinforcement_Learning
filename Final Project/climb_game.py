@@ -8,6 +8,8 @@ NUM_OF_EPISODE = 1000
 NUM_OF_SIMULATION = 500
 
 new_environment = [[11, -30, 0, 5], [-30, 7, 6, 0], [0, 0, 5, -30]]
+new_environment_grid_penalty = [[10, 0, 0, -10], [0, 2, 0, -10], [0, 0, 10, -10]]
+
 
 def climb_and_penalty(grid, alpha, gamma, ex):
     reward_arr = []
@@ -15,7 +17,7 @@ def climb_and_penalty(grid, alpha, gamma, ex):
 
     max_reward = 0
     for row in range(3):
-        for col in range(3):
+        for col in range(4):
             if grid[row][col] > max_reward:
                 max_reward = grid[row][col]
 
@@ -30,19 +32,22 @@ def climb_and_penalty(grid, alpha, gamma, ex):
 
         reward = 0
         # make agents and 2 q tables for each agent
-        agent1 = Agent(q_a1, q_b1, action_arr_1, ex, reward, alpha, gamma)
-        agent2 = Agent(q_a2, q_b2, action_arr_2, ex, reward, alpha, gamma)
+        agent1 = Agent(q_a1, q_b1, action_arr_1, reward, alpha, gamma)
+        agent2 = Agent(q_a2, q_b2, action_arr_2, reward, alpha, gamma)
 
         count = 0
         T = 1
         for episode in range(NUM_OF_EPISODE):
-            ex = 1 / T
+            if episode == 0:
+                ex = 1
+            else:
+                ex = 1 / T
 
             reward = 0
 
             # choose action
-            action1 = agent1.choose_action()
-            action2 = agent2.choose_action()
+            action1 = agent1.choose_action(ex)
+            action2 = agent2.choose_action(ex)
 
             #index 1 is where action is
             if(action1[1] == 0 and action2[1] == 0):
@@ -124,7 +129,5 @@ def climb_and_penalty(grid, alpha, gamma, ex):
     return mean_per
 
 
-
-
 # def climb_and_penalty(grid, alpha, gamma, ex):
-climb_and_penalty(new_environment, 0.1, 0, 1)
+climb_and_penalty(new_environment_grid_penalty, 0.1, 0, 1)

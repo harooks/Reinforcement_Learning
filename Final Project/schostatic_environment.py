@@ -37,7 +37,6 @@ def partial_stochastic_climb(grid, alpha, gamma, ex):
                 ex = 1
             else:
                 ex = 1 / T
-
             reward = 0
 
             action1 = agent1.choose_action(ex)
