@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 
 from agent import Agent
+from random_agent import AgentR
 
 
 NUM_OF_EPISODE = 1000
@@ -34,7 +35,7 @@ def climb_and_penalty(grid, alpha, gamma, ex):
 
         # make agents and 2 q tables for each agent
         agent1 = Agent(q_a1, q_b1, action_arr, reward, alpha, gamma)
-        agent2 = Agent(q_a2, q_b2, action_arr, reward, alpha, gamma)
+        agent2 = AgentR(q_a2, q_b2, action_arr, reward, alpha, gamma)
 
         count = 0
         T = 1
@@ -118,10 +119,10 @@ def climb_and_penalty(grid, alpha, gamma, ex):
 
 environment_grid_climb = [[11, -30, 0], [-30, 7, 6], [0, 0, 5]]
 
-k = 0  # placeholder value to be changed
+k = -100  # placeholder value to be changed
 environment_grid_penalty = [[10, 0, k], [0, 2, 0], [k, 0, 10]]
 # def climb_and_penalty(grid, alpha, gamma, ex):
-climb_and_penalty(environment_grid_penalty, 0.1, 0, 1)
+climb_and_penalty(environment_grid_climb, 0.1, 0, 1)
 # Climb: 17.5002
 # Penalty k=0: 86.126
 # Penalty k=100: 61.0236

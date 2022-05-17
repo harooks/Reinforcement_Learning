@@ -3,6 +3,7 @@ import random
 import numpy as np
 
 from agent import Agent
+from random_agent import AgentR
 
 NUM_OF_EPISODE = 1000
 NUM_OF_SIMULATION = 500
@@ -33,7 +34,7 @@ def climb_and_penalty(grid, alpha, gamma, ex):
         reward = 0
         # make agents and 2 q tables for each agent
         agent1 = Agent(q_a1, q_b1, action_arr_1, reward, alpha, gamma)
-        agent2 = Agent(q_a2, q_b2, action_arr_2, reward, alpha, gamma)
+        agent2 = AgentR(q_a2, q_b2, action_arr_2, reward, alpha, gamma)
 
         count = 0
         T = 1
@@ -130,4 +131,4 @@ def climb_and_penalty(grid, alpha, gamma, ex):
 
 
 # def climb_and_penalty(grid, alpha, gamma, ex):
-climb_and_penalty(new_environment_grid_penalty, 0.1, 0, 1)
+climb_and_penalty(new_environment, 0.1, 0, 1)
