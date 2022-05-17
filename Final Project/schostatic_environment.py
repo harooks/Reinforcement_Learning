@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from agent import Agent
+from random_agent import AgentR
 
 NUM_OF_EPISODE = 500
 NUM_OF_SIMULATION = 100
@@ -28,7 +29,7 @@ def partial_stochastic_climb(grid, alpha, gamma, ex):
 
         reward = 0
         agent1 = Agent(q_a1, q_b1, action_arr, reward, alpha, gamma)
-        agent2 = Agent(q_a2, q_b2, action_arr, reward, alpha, gamma)
+        agent2 = AgentR(q_a2, q_b2, action_arr, reward, alpha, gamma)
 
         count = 0
         T = 1
@@ -132,7 +133,7 @@ def fully_stochastic_climb(grid, alpha, gamma, ex):
         reward = 0
 
         agent1 = Agent(q_a1, q_b1, action_arr, reward, alpha, gamma)
-        agent2 = Agent(q_a2, q_b2, action_arr, reward, alpha, gamma)
+        agent2 = AgentR(q_a2, q_b2, action_arr, reward, alpha, gamma)
 
         count = 0
         T = 1

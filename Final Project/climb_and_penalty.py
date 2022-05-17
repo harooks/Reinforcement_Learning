@@ -2,7 +2,8 @@ import enum
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-
+from agent_softmax import Agent_softmax
+import math
 
 from agent import Agent
 from random_agent import AgentR
@@ -34,22 +35,21 @@ def climb_and_penalty(grid, alpha, gamma, ex):
         q_b2 = [0, 0, 0]
 
         # make agents and 2 q tables for each agent
-        agent1 = Agent(q_a1, q_b1, action_arr, reward, alpha, gamma)
-        agent2 = AgentR(q_a2, q_b2, action_arr, reward, alpha, gamma)
+        agent1 = Agent_softmax(q_a1, q_b1, action_arr, reward, alpha, gamma)
+        agent2 = Agent_softmax(q_a2, q_b2, action_arr, reward, alpha, gamma)
 
         count = 0
         T = 1
+        temp = 0
         # print("simulation", simulation, "ex:", ex)
         for episode in range(NUM_OF_EPISODE):
 
             reward = 0
-            if episode == 0:
-                ex = 1
-            else:
-                ex = 1 / T
+            temp = 500 * math.exp(-0.006 * episode) + 1
+            
             # choose action
-            action1 = agent1.choose_action(ex) # does this take in q_a and q_b??
-            action2 = agent2.choose_action(ex)
+            action1 = agent1.choose_action_softmax(temp) # does this take in q_a and q_b??
+            action2 = agent2.choose_action_softmax(temp)
 
 
             #index 1 is where action is

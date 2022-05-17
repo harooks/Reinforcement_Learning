@@ -10,7 +10,7 @@ class Agent_softmax:
     self.q_b = q_b
     self.action_arr = action_arr
 
-  def softmax(qtable, temp):
+  def softmax(self, qtable, temp):
     total = sum([math.exp(val/temp) for val in qtable])
     probs = [math.exp(val/temp) / total for val in qtable]
 
